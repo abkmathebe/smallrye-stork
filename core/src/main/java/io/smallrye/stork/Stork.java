@@ -44,6 +44,7 @@ public final class Stork implements StorkServiceRegistry {
      * The stork name.
      */
     public static final String STORK = "stork";
+    public static final String EMPTY_STRING = "";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Stork.class);
 
@@ -52,7 +53,7 @@ public final class Stork implements StorkServiceRegistry {
 
     @Override
     public Service getService(String serviceName) {
-        Service service = services.get(serviceName);
+        Service service = services.getOrDefault(serviceName, services.get(EMPTY_STRING));
         if (service == null) {
             throw new NoSuchServiceDefinitionException(serviceName);
         }

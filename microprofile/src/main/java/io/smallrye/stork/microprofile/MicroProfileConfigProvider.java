@@ -70,7 +70,15 @@ public class MicroProfileConfigProvider implements ConfigProvider {
             }
             String serviceName = unwrapFromQuotes(matcher.group());
 
-            int serviceNameEndIdx = matcher.end();
+            int serviceNameEndIdx;
+            //If no service name create default and move matcher back
+            if(serviceName.equals(LOAD_BALANCER) || serviceName.equals(LOAD_BALANCER_EMBEDDED)
+                    || serviceName.equals(SERVICE_DISCOVERY) || serviceName.equals(SERVICE_DISCOVERY_EMBEDDED)){
+                serviceName = "";
+                serviceNameEndIdx = matcher.start();
+            }else{
+                serviceNameEndIdx = matcher.end();
+            }
 
             if (!matcher.find()) {
                 log.warn("Potentially invalid property for SmallRye Stork: " + propertyName);

@@ -66,6 +66,30 @@ public class MicroProfileConfigProviderTest {
         assertThat(sd.getConfig().getTwo()).isEqualTo("http://localhost:8081");
     }
 
+
+    @Test
+    void defaultServiceDiscovery() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("stork.service-discovery", "test-sd-1");
+        properties.put("stork.service-discovery.one", "http://localhost:8080");
+        properties.put("stork.service-discovery.two", "http://localhost:8081");
+
+        Stork stork = storkForConfig(properties);
+
+        // Use round-robin when not configured.
+        assertThat(stork.getService("test-service").getLoadBalancer()).isInstanceOf(RoundRobinLoadBalancer.class);
+
+        ServiceDiscovery serviceDiscovery = stork.getService("test-service").getServiceDiscovery();
+
+        assertThat(serviceDiscovery).isNotNull().isInstanceOf(TestServiceDiscovery.class);
+
+        TestServiceDiscovery sd = (TestServiceDiscovery) serviceDiscovery;
+        assertThat(sd.getType()).isEqualTo("test-sd-1");
+        assertThat(sd.getConfig().getOne()).isEqualTo("http://localhost:8080");
+        assertThat(sd.getConfig().getTwo()).isEqualTo("http://localhost:8081");
+    }
+
+
     @Test
     void shouldConfigureServiceDiscoveryOnlyUsingEmbeddedType() {
         Map<String, String> properties = new HashMap<>();
@@ -82,6 +106,26 @@ public class MicroProfileConfigProviderTest {
         assertThat(sd.getType()).isEqualTo("test-sd-1");
         assertThat(sd.getConfig().getOne()).isEqualTo("http://localhost:8080");
         assertThat(sd.getConfig().getTwo()).isEqualTo(null);
+    }
+
+    @Test
+    void defaultServiceDiscoveryUsingEmbeddedType() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("stork.service-discovery.type", "test-sd-1");
+        properties.put("stork.service-discovery.one", "http://localhost:8080");
+
+        Stork stork = storkForConfig(properties);
+
+        // Use round-robin when not configured.
+        assertThat(stork.getService("test-service").getLoadBalancer()).isInstanceOf(RoundRobinLoadBalancer.class);
+
+        ServiceDiscovery serviceDiscovery = stork.getService("test-service").getServiceDiscovery();
+
+        assertThat(serviceDiscovery).isNotNull().isInstanceOf(TestServiceDiscovery.class);
+
+        TestServiceDiscovery sd = (TestServiceDiscovery) serviceDiscovery;
+        assertThat(sd.getType()).isEqualTo("test-sd-1");
+        assertThat(sd.getConfig().getOne()).isEqualTo("http://localhost:8080");
     }
 
     @Test
