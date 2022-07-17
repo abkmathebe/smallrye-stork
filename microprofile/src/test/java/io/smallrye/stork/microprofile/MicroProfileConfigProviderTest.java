@@ -17,13 +17,7 @@ import io.smallrye.stork.Stork;
 import io.smallrye.stork.api.LoadBalancer;
 import io.smallrye.stork.api.ServiceDiscovery;
 import io.smallrye.stork.impl.RoundRobinLoadBalancer;
-import io.smallrye.stork.test.StorkTestUtils;
-import io.smallrye.stork.test.TestConfigProvider;
-import io.smallrye.stork.test.TestLoadBalancer1;
-import io.smallrye.stork.test.TestLoadBalancer2;
-import io.smallrye.stork.test.TestSd2Configuration;
-import io.smallrye.stork.test.TestServiceDiscovery;
-import io.smallrye.stork.test.TestServiceDiscovery2;
+import io.smallrye.stork.test.*;
 
 public class MicroProfileConfigProviderTest {
 
@@ -66,7 +60,6 @@ public class MicroProfileConfigProviderTest {
         assertThat(sd.getConfig().getTwo()).isEqualTo("http://localhost:8081");
     }
 
-
     @Test
     void defaultServiceDiscovery() {
         Map<String, String> properties = new HashMap<>();
@@ -88,7 +81,6 @@ public class MicroProfileConfigProviderTest {
         assertThat(sd.getConfig().getOne()).isEqualTo("http://localhost:8080");
         assertThat(sd.getConfig().getTwo()).isEqualTo("http://localhost:8081");
     }
-
 
     @Test
     void shouldConfigureServiceDiscoveryOnlyUsingEmbeddedType() {
@@ -237,8 +229,7 @@ public class MicroProfileConfigProviderTest {
 
     private Stork storkForConfig(Map<String, String> properties) {
         SmallRyeConfig config = new SmallRyeConfigBuilder()
-                .withSources(new ConfigValuePropertiesConfigSource(properties, "test-config-source", 0))
-                .build();
+                .withSources(new ConfigValuePropertiesConfigSource(properties, "test-config-source", 0)).build();
         ConfigProviderResolver.setInstance(new TestMicroProfileConfigProvider(config));
         return StorkTestUtils.getNewStorkInstance();
     }
