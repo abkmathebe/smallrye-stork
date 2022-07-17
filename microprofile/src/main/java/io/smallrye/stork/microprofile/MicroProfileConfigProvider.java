@@ -71,7 +71,7 @@ public class MicroProfileConfigProvider implements ConfigProvider {
             String serviceName = unwrapFromQuotes(matcher.group());
 
             int serviceNameEndIdx;
-            //If no service name create default and move matcher back
+            //If no service name create default and move the matcher back
             if(serviceName.equals(LOAD_BALANCER) || serviceName.equals(LOAD_BALANCER_EMBEDDED)
                     || serviceName.equals(SERVICE_DISCOVERY) || serviceName.equals(SERVICE_DISCOVERY_EMBEDDED)){
                 serviceName = "";
